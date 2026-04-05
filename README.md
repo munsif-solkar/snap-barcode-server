@@ -4,6 +4,9 @@ A lightweight Electron-based server that receives barcode data from a mobile app
 
 Designed to act as a bridge between **Android scanner app → desktop automation system**.
 
+- 📱 **Android Client App:**  
+   https://github.com/munsif-solkar/snap-barcode-client
+
 ---
 
 ## Features
