@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Snap Barcode Server</title>
+  <link href="./styles/tw-style.css" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>      
+
+<script>
+function settings() {
+  return {
+    typing: true,
+    pressEnter: false,
+
+    init() {
+      this.send();
+
+      this.$watch('typing', () => this.send());
+      this.$watch('pressEnter', () => this.send());
+    },
+
+    send() {
+      window.electronAPI.sendAutomationSettings({
+        typing: this.typing,
+        pressEnter: this.pressEnter
+      });
+    }
+  }
+}
+</script>
+
+</head>
+
+<body class="bg-white font-sans text-gray-800">
+
+  <nav class="w-full bg-white shadow-md px-6 py-3 border-b border-gray-100 fixed top-0 z-10 flex flex-row justify-between items-center">
+
+    <div class=''>
+      <h1 class=" font-bold text-[#2C687B]">SNAP BARCODE SCANNER</h1>
+    </div>
+  <div>
+      <a href='#' class=" py-1 px-3 rounded-md border border-[#37353E] text-sm ">How to use?</a>
+    </div>
+  </nav>
+
+
+  <div class="container mx-auto max-w-md mt-16">
+    <!-- Header -->
+    <div class="mx-auto max-w-md space-y-2">
+
+      <p class="text-sm text-gray-600">Capture barcode and QR code data via camera input and transmit it to your PC.</p>
+    </div>
+
+    <!-- Buttons -->
+    <div class="server-info mt-3 flex flex-col gap-3" x-data="{ serverRunning: false}">
+
+      <div class="flex gap-7 items-center">
+        <button id="start" x-show="!serverRunning" @click="serverRunning = true"
+          class="bg-[#2C687B] px-3 py-2 font-semibold text-white transition hover:bg-[#4E8D9C] rounded-full w-1/2">Start
+          Server</button>
+
+        <button id="stop" x-show="serverRunning" @click="serverRunning = false"
+          class="bg-[#3a3737] px-3 py-2 text-white transition hover:bg-[#524e4e] rounded-full w-1/2">Stop
+          Server</button>
+
+        <div class="app-settings flex items-center w-full justify-around" x-data="settings()">
+
+          <label
+            class="inline-flex items-center cursor-pointer border-1 border-gray-400 px-2 py-2 rounded-full bg-[#FFFDF6]"
+            title="Type barcode value to focused field">
+            <input type="checkbox" value="" class="sr-only peer" x-model="typing">
+            <div
+              class="relative w-9 h-5 bg-gray-400 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4E8D9C]">
+            </div>
+            <span class="select-none ms-3 text-sm font-medium text-heading">Typing</span>
+          </label>
+          <label class="inline-flex items-center cursor-pointer border-1 border-gray-400 px-2 py-2 rounded-full"
+            title="Press enter key after typing barcode to your system">
+            <input type="checkbox" value="" class="sr-only peer" x-model="pressEnter">
+            <div
+              class="relative w-9 h-5 bg-gray-400 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#4E8D9C]">
+            </div>
+            <span class="select-none ms-3 text-sm font-medium text-heading">Press Enter</span>
+          </label>
+
+        </div>
+      </div>
+      <div class="server-address px-2 flex flex-row items-center justify-between bg-gray-100 py-3 rounded-sm"
+        x-show="serverRunning">
+        <div>
+          <p>Server running on</p>
+          <p id="server-host" class='text-[#2C687B] text-[20px] font-medium'>192.168.0.0</p>
+        </div>
+        <div x-data="{ status: '' }" x-init="
+    window.electronAPI.clientStatus((event, msg) => { status = msg })
+">
+          <p x-show="status" x-text="status" :class="status === 'connected' ? 'text-green-600 bg-green-100' 
+             : status === 'disconnected' ? 'text-red-600 bg-red-100' 
+             : 'text-gray-500'" class="px-2 py-1 rounded-full font-medium"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="qrcode-display p-2 space-y-2.5 mt-2">
+      <h3 class="font-medium">Received code will appear below</h3>
+      <!-- codes table -->
+
+      <div
+        class="codes-table flex flex-col items-center"
+        x-data="{code: ''}"
+        x-init="window.addEventListener('new-code',(e)=>{
+      code = e.detail
+     })"
+      >
+        <p class="text-2xl font-semibold tracking-wide w-full" x-text="code"></p>
+        <img class="mt-8 opacity-10" width="80" src="https://cdn-icons-png.flaticon.com/128/15953/15953021.png" x-show="!code"/>
+      </div>
+    </div>
+  </div>
+</body>
+
+
+<script type="module" src="./scripts/renderer.js"></script>
+
+</html>
