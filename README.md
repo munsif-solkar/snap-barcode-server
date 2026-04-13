@@ -1,4 +1,4 @@
-# snap-barcode-server
+# Snap Barcode Server
 
 A lightweight Electron-based server that receives barcode data from a mobile app and automates system-level actions like typing and key presses.
 
@@ -9,40 +9,26 @@ Designed to act as a bridge between **Android scanner app → desktop automation
 
 ---
 
-## Features
-
-- 📡 Real-time barcode receiving via socket connection
-- 💻 Desktop automation using keyboard injection
-- ⌨️ Optional auto-type mode
-- ⏎ Optional auto-press Enter after scan
-- 🪟 Windows executable support (Electron)
-- 🎛️ Simple UI for connection status
-- ⚙️ Configurable automation behavior
-
----
-
-## Use Case
-
-- Inventory systems
-- Warehouse barcode tracking
-- POS systems
-- Data entry automation
-- Office workflow automation
-
----
-
 ## Architecture
 
 Android App → WebSocket → Electron Server → Keyboard Automation → OS Input
 
 ## Getting Started
 
-### 1. Install dependencies
+### 1. Clone repo
+```bash
+git clone https://github.com/munsif-solkar/snap-barcode-server.git && cd snap-barcode-server
+
+# Move to directory
+cd snap-barcode-server
+```
+
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
-### 2. Run app
+### 3. Run app
 
 ```bash
 npm start
