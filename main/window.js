@@ -5,7 +5,7 @@ function createMainWindow() {
   const win = new BrowserWindow({
     width: 600,
     height: 450,
-    
+    icon: path.join(__dirname, "../assets/snap-barcode-logo.png"),
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
@@ -15,7 +15,7 @@ function createMainWindow() {
 
   Menu.setApplicationMenu(null)
 
-  win.loadFile('../ui/index.html');
+  win.loadFile(path.join(__dirname,'../ui/index.html'));
   return win
 }
 
