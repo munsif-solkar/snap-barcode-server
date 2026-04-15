@@ -34,10 +34,6 @@
   "build": {
   "appId": "com.snapbarcodeserver.app",
   "compression":"maximum",
-  "asarUnpack": [
-    "**/libffmpeg*",
-    "**/chrome-sandbox"
-  ],
   "productName": "Snap Barcode Server",
   "win": {
     "target": "nsis",
