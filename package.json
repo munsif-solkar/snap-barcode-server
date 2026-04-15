@@ -17,7 +17,8 @@
   "scripts": {
     "start": "electron main/main.js --no-sandbox",
     "build-css": "npx tailwindcss -i ./ui/styles/input.css -o ./ui/styles/tw-style.css --minify",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dist":"electron-builder"
   },
   "dependencies": {
     "@tailwindcss/cli": "^4.2.1",
