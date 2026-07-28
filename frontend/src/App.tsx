@@ -9,8 +9,6 @@ import { EventsOn } from "../wailsjs/runtime/runtime";
 import { GetSettings } from "../wailsjs/go/main/App";
 import { UpdateSettings } from "../wailsjs/go/main/App";
 import type { SettingKey, Settings } from "../types/automation";
-import { Label } from "./components/ui/label";
-import { Switch } from "./components/ui/switch";
 import { PillToggle } from "./components/ui/PillTogle";
 
 
