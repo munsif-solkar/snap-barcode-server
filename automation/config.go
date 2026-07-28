@@ -15,22 +15,23 @@ type Config struct {
 var Settings Config
 
 func getSettingsPath() string {
-	exePath, err := os.Executable()
+	configDir, err := os.UserConfigDir()
 	if err != nil {
 		panic(err)
 	}
-	exeDir := filepath.Dir(exePath)
 
-	return filepath.Join(exeDir, "automation", "settings.json")
+	appDir := filepath.Join(configDir, "SnapBarcodeServer")
+
+	return filepath.Join(appDir, "settings.json")
 }
 
 func LoadConfig() error {
-
 	path := getSettingsPath()
 
 	file, err := os.ReadFile(path)
 
 	if err != nil {
+		// First launch - create default settings
 		Settings = Config{
 			EnableTyping: true,
 			PressEnter:   true,
@@ -45,6 +46,12 @@ func LoadConfig() error {
 
 func SaveConfig() error {
 	path := getSettingsPath()
+
+	// Create config directory if it does not exist
+	err := os.MkdirAll(filepath.Dir(path), 0755)
+	if err != nil {
+		return err
+	}
 
 	data, err := json.MarshalIndent(
 		Settings,
