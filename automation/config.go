@@ -3,6 +3,7 @@ package automation
 import (
 	"encoding/json"
 	"os"
+	"path/filepath"
 )
 
 type Config struct {
@@ -13,9 +14,21 @@ type Config struct {
 
 var Settings Config
 
+func getSettingsPath() string {
+	exePath, err := os.Executable()
+	if err != nil {
+		panic(err)
+	}
+	exeDir := filepath.Dir(exePath)
+
+	return filepath.Join(exeDir, "automation", "settings.json")
+}
+
 func LoadConfig() error {
 
-	file, err := os.ReadFile("settings.json")
+	path := getSettingsPath()
+
+	file, err := os.ReadFile(path)
 
 	if err != nil {
 		Settings = Config{
@@ -31,6 +44,7 @@ func LoadConfig() error {
 }
 
 func SaveConfig() error {
+	path := getSettingsPath()
 
 	data, err := json.MarshalIndent(
 		Settings,
@@ -43,7 +57,7 @@ func SaveConfig() error {
 	}
 
 	return os.WriteFile(
-		"settings.json",
+		path,
 		data,
 		0644,
 	)
