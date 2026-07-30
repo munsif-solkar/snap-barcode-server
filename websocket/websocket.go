@@ -2,10 +2,10 @@ package websocket
 
 import (
 	"fmt"
+	"net"
 	"net/http"
-	"sync"
-
 	"snap-barcode-server/message"
+	"sync"
 
 	"github.com/gorilla/websocket"
 )
@@ -78,29 +78,31 @@ func StartWebSocket() (string, error) {
 		}
 	})
 
+	listener, err := net.Listen("tcp", WSConfig.Host+":"+WSConfig.Port)
+	if err != nil {
+		return "", err
+	}
+
 	server = &http.Server{
-		Addr:    WSConfig.Host + ":" + WSConfig.Port,
 		Handler: mux,
 	}
 
 	go func() {
 
-		fmt.Println("WebSocket running")
-
-		err := server.ListenAndServe()
+		err := server.Serve(listener)
 
 		if err != nil && err != http.ErrServerClosed {
-			fmt.Println(err)
+			server = nil
 		}
 
 	}()
+
+	fmt.Println("WebSocket running")
 
 	return localIP, nil
 }
 
 func StopWebSocket() error {
-
-	fmt.Println("Stopping WebSocket")
 
 	// Close all clients
 	mutex.Lock()
@@ -115,7 +117,11 @@ func StopWebSocket() error {
 
 	// Stop HTTP server
 	if server != nil {
+		fmt.Println("Stopping WebSocket")
 		return server.Close()
+	} else if server == nil {
+		fmt.Println("WebSocket server is not running")
+		return nil
 	}
 
 	fmt.Println("WebSocket stopped")

@@ -9,10 +9,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-func (a *App) StartSocketServer() string {
+func (a *App) StartSocketServer() (string, error) {
 	if url, err := websocket.StartWebSocket(); err != nil {
 		fmt.Println(err)
-		return ""
+		return "", err
 	} else {
 
 		fmt.Println("WebSocket started at:", url)
@@ -25,7 +25,7 @@ func (a *App) StartSocketServer() string {
 		message.Callbacks.OnMessageReceived = func(msg string) {
 			runtime.EventsEmit(a.ctx, "message-received", msg)
 		}
-		return url
+		return url, nil
 	}
 }
 

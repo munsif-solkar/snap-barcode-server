@@ -18,6 +18,7 @@ function App() {
   const [serverIp, setServerIp] = useState<any>(null);
   const [clientConnected, setClientConnected] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const [settings, setSettings] = useState<Settings>({
     enableTyping: false,
@@ -26,6 +27,7 @@ function App() {
   });
 
   async function handleClick() {
+    setError(null)
     if (server) {
       try {
         await StopSocketServer();
@@ -40,6 +42,7 @@ function App() {
       setServerStatus(true);
       setServerIp(serverIp);
     } catch (error) {
+      setError(error instanceof Error ? error.message : String(error));
       console.error("Error calling StartSocketServer:", error);
     }
   }
@@ -99,6 +102,8 @@ function App() {
 
           <p className="text-sm text-gray-600">Capture barcode and QR code data via camera input and transmit it to your PC.</p>
         </div>
+
+        <p className="mt-3 text-sm text-gray-600">{error && <span className="text-red-500">{error}</span>}</p>
 
 
 
