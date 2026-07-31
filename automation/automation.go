@@ -2,7 +2,8 @@ package automation
 
 import (
 	"fmt"
-	"time"
+
+	"github.com/go-vgo/robotgo"
 )
 
 func ExecuteAutomation(code string) {
@@ -22,20 +23,14 @@ func ExecuteAutomation(code string) {
 
 func TypeText(text string) {
 
-	for _, char := range text {
+	fmt.Println("Typing text:", text)
+	robotgo.Type(text)
 
-		fmt.Print(string(char))
-
-		time.Sleep(
-			time.Duration(Settings.TypingDelay) * time.Millisecond,
-		)
-	}
 }
 
 func PressEnter() {
 
 	fmt.Println("ENTER pressed")
-
-	// actual key press logic here
+	robotgo.KeyTap("enter")
 
 }
