@@ -20,6 +20,7 @@ function App() {
   const [clientConnected, setClientConnected] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [serverDetailsVisible, setServerDetailsVisible] = useState(true);
 
   const [settings, setSettings] = useState<Settings>({
     enableTyping: false,
@@ -33,6 +34,7 @@ function App() {
       try {
         await StopSocketServer();
         setServerStatus(false);
+        setServerDetailsVisible(true);
       } catch (error) {
         console.error("Error calling StopSocketServer:", error);
       }
@@ -101,10 +103,10 @@ function App() {
       <div className="container mx-auto max-w-md mt-16">
         <div className="mx-auto max-w-md space-y-2">
 
-          <p className="text-sm text-gray-600">Capture barcode and QR code data via camera input and transmit it to your PC.</p>
+          <p className="text-secondary">Capture barcode and QR code data via camera input and transmit it to your PC.</p>
         </div>
 
-        <p className="mt-3 text-sm text-gray-600">{error && <span className="text-red-500">{error}</span>}</p>
+        <p className="mt-3 text-secondary">{error && <span className="text-red-500">{error}</span>}</p>
 
 
 
@@ -152,7 +154,15 @@ function App() {
 
         </div>
         {server && (
-          <div>
+          <div className="server-details mt-3 p-3 bg-white  rounded-md shadow-md">
+            <div className="flex items-center justify-between">
+            <p className="text-secondary">Server details</p>
+            <button className="text-sm text-black px-2 py-0.5 rounded-full border border-gray-700" onClick={() => setServerDetailsVisible(!serverDetailsVisible)}>
+             <p className=""> {serverDetailsVisible ? "Hide" : "Show"}</p>
+            </button>
+            </div>
+            
+            <section className={`transition-all duration-300 ease-in-out ${serverDetailsVisible ? "max-h-screen" : "max-h-0 overflow-hidden"}`}>
             <div className="server-address px-2 flex flex-row items-center justify-between bg-gray-100 py-3 rounded-sm mt-3">
               <div>
                 <p>Server running on</p>
@@ -177,10 +187,10 @@ function App() {
 
             {/* qr code */}
 
-            <div className="flex flex-row items-center justify-between gap-3 p-2">
+            <div className="flex flex-row items-center justify-between gap-3 p-2 mt-2">
               <div className="w-1/2">
               <h1>Scan to connect</h1>
-              <p className="text-sm text-gray-600">Open the SnapBarcode app on your device and scan the QR code to connect.</p>
+              <p className="text-secondary">Open the SnapBarcode app on your device and scan the QR code to connect.</p>
               </div>
               <QRCodeSVG
                 value={serverIp || ""}
@@ -190,13 +200,14 @@ function App() {
                 level="H"
               />
             </div>
+            </section>
           </div>
 
         )}
 
 
 
-        <p className="mt-3 text-sm text-gray-600">{message ? `Last message received: ${message}` : "No messages received yet."}</p>
+        <p className="mt-3 text-sm text-gray-600">{message ? `Last message received: ${message}` : ""}</p>
       </div>
 
     </>

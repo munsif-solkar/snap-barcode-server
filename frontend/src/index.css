@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer components {
+  .text-secondary {
+    @apply text-sm text-gray-600;
+  }
+}
+
+:root {
+    --app-theme: #4E8D9C;
+}
