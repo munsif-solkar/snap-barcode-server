@@ -20,7 +20,7 @@ function ServerDetails( { serverIp, clientConnected, serverDetailsVisible, setSe
             </div>
             
             <section className={`transition-all duration-300 ease-in-out ${serverDetailsVisible ? "max-h-screen" : "max-h-0 overflow-hidden"}`}>
-            <div className="server-address px-2 flex flex-row items-center justify-between bg-gray-100 py-3 rounded-sm mt-3">
+            <div className="server-address px-2 flex flex-row items-center justify-between py-3 rounded-sm mt-3">
               <div>
                 <p>Server running on</p>
                 <p
@@ -35,7 +35,10 @@ function ServerDetails( { serverIp, clientConnected, serverDetailsVisible, setSe
                 <p
                   className={`px-3 py-1 rounded-full font-medium transition-colors`}
                 >
-                  {clientConnected ? <PiPlugsConnectedFill size={30} /> : <TbPlugConnectedX size={30} />}
+                  {clientConnected ? 
+                  
+                  <p title="Device connected"><PiPlugsConnectedFill size={30} /></p> : 
+                  <p title="Device not connected"><TbPlugConnectedX size={30} /></p>}
                 </p>
               </div>
 
@@ -47,7 +50,7 @@ function ServerDetails( { serverIp, clientConnected, serverDetailsVisible, setSe
             <div className="flex flex-row items-center justify-between gap-3 p-2 mt-2">
               <div className="w-1/2">
               <h1>Scan to connect</h1>
-              <p className="text-secondary">Open the SnapBarcode app on your device and scan the QR code to connect.</p>
+              <p className="text-secondary">Open the SnapBarcode app on your mobile and scan the QR code to connect.</p>
               </div>
               <QRCodeSVG
                 value={serverIp || ""}
