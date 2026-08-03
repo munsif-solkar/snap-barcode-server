@@ -1,4 +1,4 @@
-
+import { FaGithub } from "react-icons/fa";
 
 function Navbar() {
   return (
@@ -7,7 +7,8 @@ function Navbar() {
     <div className=''>
       <h1 className=" font-bold text-(--app-theme)">SNAP BARCODE SCANNER</h1>
     </div>
-  <div>
+  <div className="flex flex-row gap-3 items-center">
+      <FaGithub size={30} />
       <a href='https://github.com/munsif-solkar/snap-barcode-server' target="_blank" className=" py-1 px-3 rounded-md border border-[#37353E] text-sm ">How to use?</a>
     </div>
   </nav>

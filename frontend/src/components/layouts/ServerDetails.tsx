@@ -7,6 +7,9 @@ interface ServerDetailsProps {
     setServerDetailsVisible: (visible: boolean) => void;
 }
 
+import { TbPlugConnectedX} from "react-icons/tb";
+import { PiPlugsConnectedFill } from "react-icons/pi";
+
 function ServerDetails( { serverIp, clientConnected, serverDetailsVisible, setServerDetailsVisible }: ServerDetailsProps) {
     return (<div className="server-details mt-3 p-3 bg-white  rounded-md shadow-md">
             <div className="flex items-center justify-between">
@@ -32,7 +35,7 @@ function ServerDetails( { serverIp, clientConnected, serverDetailsVisible, setSe
                 <p
                   className={`px-3 py-1 rounded-full font-medium transition-colors`}
                 >
-                  {clientConnected ? "Connected" : "Waiting for connection"}
+                  {clientConnected ? <PiPlugsConnectedFill size={30} /> : <TbPlugConnectedX size={30} />}
                 </p>
               </div>
 
