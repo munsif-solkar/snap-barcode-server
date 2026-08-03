@@ -4,19 +4,23 @@ import "@/index.css";
 
 import Navbar from "@/components/layouts/Navbar"
 import { Button } from "./components/ui/button";
-import { StartSocketServer, StopSocketServer } from "../wailsjs/go/main/App"
+import {
+  StartSocketServer,
+  StopSocketServer,
+  GetSettings,
+  UpdateSettings,
+} from "../wailsjs/go/main/App";
 import { EventsOn } from "../wailsjs/runtime/runtime";
-import { GetSettings } from "../wailsjs/go/main/App";
-import { UpdateSettings } from "../wailsjs/go/main/App";
 import type { SettingKey, Settings } from "../types/automation";
 import { PillToggle } from "./components/ui/PillTogle";
 import ServerDetails from "./components/layouts/ServerDetails";
+import { cn } from "./lib/utils";
 
 
 
 function App() {
   const [server, setServerStatus] = useState(false);
-  const [serverIp, setServerIp] = useState<any>(null);
+  const [serverIp, setServerIp] = useState<string | null>(null);
   const [clientConnected, setClientConnected] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -50,20 +54,6 @@ function App() {
     }
   }
 
-  EventsOn("client-connected", () => {
-    setClientConnected(true);
-    console.log("Client connected");
-  });
-
-  EventsOn("client-disconnected", () => {
-    setClientConnected(false);
-    console.log("Client disconnected");
-  });
-
-  EventsOn("message-received", (msg: string) => {
-    setMessage(msg);
-    console.log("Message received:", msg);
-  });
 
 
   async function loadSettings() {
@@ -94,6 +84,23 @@ function App() {
 
   useEffect(() => {
     loadSettings();
+    const offConnected = EventsOn("client-connected", () => {
+      setClientConnected(true);
+    });
+
+    const offDisconnected = EventsOn("client-disconnected", () => {
+      setClientConnected(false);
+    });
+
+    const offMessage = EventsOn("message-received", (msg: string) => {
+      setMessage(msg);
+    });
+
+    return () => {
+      offConnected();
+      offDisconnected();
+      offMessage();
+    };
   }, []);
 
 
@@ -112,10 +119,11 @@ function App() {
 
         <div className="server-info mt-3 flex flex-col justify-between">
           <div className="flex items-center gap-3">
-            <Button variant="snap_barcode_server_button" size="lg" onClick={handleClick} className={`${server
-              ? "bg-[#3a3737] hover:bg-[#524e4e]"
-              : "bg-[#2C687B] hover:bg-[#4E8D9C]"
-              }`}>
+            <Button variant="snap_barcode_server_button" size="lg" onClick={handleClick} className={cn(
+              server
+                ? "bg-(--theme-secondary) hover:bg-[#524e4e]"
+                : "bg-(--app-theme) hover:bg-[#4E8D9C]"
+            )}>
               {
                 server ? "Stop" : "Start"
               }
@@ -143,8 +151,6 @@ function App() {
 
 
 
-
-
             </div>
 
 
@@ -164,7 +170,7 @@ function App() {
 
 
 
-        <p className="mt-3 text-sm text-gray-600">{message ? `Last message received: ${message}` : ""}</p>
+        <p className="mt-3 text-sm text-gray-600">{message && `Last message received: ${message}`}</p>
       </div>
 
     </>

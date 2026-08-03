@@ -27,7 +27,7 @@ export const PillToggle = React.forwardRef<HTMLInputElement, PillToggleProps>(
         className={cn(
           "flex items-center gap-2 cursor-pointer px-3 py-2 rounded-full border transition-colors select-none",
           checked
-            ? "border-[#4E8D9C] bg-[#4E8D9C]/10"
+            ? "border-(--app-theme) bg-white"
             : "border-gray-400 bg-white hover:bg-gray-50 text-gray-700",
           disabled && "opacity-50 cursor-not-allowed",
           className
@@ -48,7 +48,7 @@ export const PillToggle = React.forwardRef<HTMLInputElement, PillToggleProps>(
           className={cn(
             "w-3 h-3 rounded-full border transition-colors inline-block shrink-0",
             checked
-              ? "bg-[#4E8D9C] border-[#4E8D9C]"
+              ? "bg-(--app-theme) border-(--app-theme)"
               : "bg-white border-gray-400"
           )}
         />
